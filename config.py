@@ -31,8 +31,6 @@ class BaseConfig:
     '''
 
     SECRET_KEY = get_env("SECRET_KEY")
-    SQLALCHEMY_ECHO = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSON_SORT_KEYS = False
 
 
@@ -42,9 +40,10 @@ class DevelopmentConfig(BaseConfig):
     '''
 
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(
-        basedir, get_env("DB_DEV_URL")
-    )
+    MONGODB_SETTINGS = {
+        "db": get_env("DEV_DB"),
+        "host": get_env("URI")
+    }
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=20)
     JWT_CREATE_TOKEN_EXPIRES = timedelta(hours=20)
 
@@ -55,9 +54,10 @@ class ProductionConfig(BaseConfig):
     '''
 
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(
-        "/tmp/", get_env("DB_PROD_URL")
-    ) 
+    MONGODB_SETTINGS = {
+        "db": get_env("PROD_DB"),
+        "host": get_env("URI")
+    }
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=20)
     JWT_CREATE_TOKEN_EXPIRES = timedelta(hours=20)
 
@@ -68,9 +68,10 @@ class TestingConfig(BaseConfig):
     '''
 
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(
-        basedir, get_env("DB_TEST_URL")
-    )
+    MONGODB_SETTINGS = {
+        "db": get_env("TEST_DB"),
+        "host": get_env("URI")
+    }
     JWT_ACCESS_TOKEN_EXPIRES = False
 
 

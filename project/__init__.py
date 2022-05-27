@@ -7,7 +7,6 @@ successful startup of the application
 
 from flask import Flask
 
-from flask_caching import Cache
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_jwt_extended import JWTManager
@@ -21,7 +20,6 @@ from config import load_configs
 db = MongoEngine()
 jwt = JWTManager()
 bcrypt = Bcrypt()
-cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 
 def create_app(config_name):
@@ -37,7 +35,6 @@ def create_app(config_name):
     db.init_app(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
-    cache.init_app(app)
 
     from .Auth import auth as auth_blueprint
     from .Template import template as template_blueprint
