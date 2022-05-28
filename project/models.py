@@ -1,4 +1,3 @@
-
 import uuid
 from datetime import datetime
 
@@ -7,20 +6,19 @@ from project import db, bcrypt
 from marshmallow import Schema, fields, validate
 
 
-
 def hex_id():
-    '''
+    """
     generates unique and random ids
     for primary key usage
-    '''
+    """
 
     return uuid.uuid4().hex
 
 
 class User(db.Document):
-    '''
+    """
     An object document mapping of the User document.
-    '''
+    """
 
     id = db.StringField(max_lenght=50, primary_key=True, default=hex_id)
     first_name = db.StringField(max_length=50, required=True)
@@ -29,37 +27,31 @@ class User(db.Document):
     password = db.StringField(max_lenght=140, required=True)
     date_created = db.DateTimeField(default=datetime.utcnow)
 
-
     def __repr__(self):
-        '''
+        """
         A readable representation of the User class
-        '''
+        """
 
         return f"User('{self.id}','{self.email}')"
 
     @staticmethod
     def hash_password(password):
-        '''
-        Hashes user password with bcrypt
-        Bcrypt is used as it is suitable for 
-        password hashing than the SHA derivatives
-        '''
 
         return bcrypt.generate_password_hash(password).decode()
 
     @staticmethod
     def verify_password_hash(password_hash, password):
-        '''
+        """
         Verifies that user password is correct
-        '''
+        """
 
         return bcrypt.check_password_hash(password_hash, password)
 
 
 class UserSchema(Schema):
-    '''
+    """
     A serializer schema for the User document
-    '''
+    """
 
     class Meta:
         model = User
@@ -73,12 +65,10 @@ class UserSchema(Schema):
     date_created = fields.DateTime(dump_only=True)
 
 
-
-
 class Template(db.Document):
-    '''
+    """
     An object document mapping of the Template document.
-    '''
+    """
 
     id = db.StringField(max_lenght=50, primary_key=True, default=hex_id)
     template_name = db.StringField(max_length=100, required=True)
@@ -88,28 +78,27 @@ class Template(db.Document):
     modified_on = db.DateTimeField(defaut=datetime.utcnow)
     owner = db.ReferenceField(User)
 
-
     def __repr__(self):
-        '''
+        """
         A readable representation of the Template class
-        '''
+        """
 
         return f"Template('{self.subject}','{self.owner.email}')"
 
 
 class TemplateSchema(Schema):
-    '''
+    """
     A serializer schema for the Template document
-    '''
+    """
 
     class Meta:
         model = Template
         ordered = True
-    
+
     id = fields.String(dump_only=True)
     template_name = fields.String(required=True)
     subject = fields.String(required=True)
     body = fields.String(required=True)
     created_on = fields.DateTime(dump_only=True)
     modified_on = fields.DateTime(dump_only=True)
-    owner = fields.Nested(UserSchema(only=('id','email')))
+    owner = fields.Nested(UserSchema(only=("id", "email")))

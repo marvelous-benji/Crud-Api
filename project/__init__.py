@@ -1,8 +1,8 @@
-'''
+"""
 This package contains the initialization
 of neccessary libraries required for the
 successful startup of the application
-'''
+"""
 
 
 from flask import Flask
@@ -15,21 +15,21 @@ from flask_bcrypt import Bcrypt
 from config import load_configs
 
 
-
-
 db = MongoEngine()
 jwt = JWTManager()
 bcrypt = Bcrypt()
 
 
 def create_app(config_name):
-    '''
+    """
     A factory pattern implementation
     of the Flask app
-    '''
+    """
 
     app = Flask(__name__)
-    app.config.from_object(load_configs[config_name]) # configures app instance for different enviroments
+    app.config.from_object(
+        load_configs[config_name]
+    )  # configures app instance for different enviroments
     CORS(app)
 
     db.init_app(app)
@@ -41,5 +41,5 @@ def create_app(config_name):
 
     app.register_blueprint(template_blueprint, url_prefix="/api/v1/template")
     app.register_blueprint(auth_blueprint, url_prefix="/api/v1/auth")
-    
+
     return app
