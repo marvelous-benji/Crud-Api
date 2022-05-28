@@ -35,7 +35,7 @@ def user_lookup_callback(_jwt_header, jwt_payload):
     return User.objects(id=identity).first()
 
 
-@auth.route("/signup", methods=["POST"])
+@auth.route("/register", methods=["POST"])
 def signup():
     '''
     User registration route
@@ -72,7 +72,7 @@ def signup():
 
 
 
-@auth.route("/signin", methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def signin():
     '''
     User signin route

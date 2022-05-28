@@ -8,10 +8,8 @@ import pytest
 from flask_jwt_extended import create_access_token
 
 from project import create_app, db
-from project.models import FavouriteTracker, User
+from project.models import Template, User
 
-
-CHARACTER_ID = "5cd99d4bde30eff6ebccfd0d"
 
 
 @pytest.fixture(autouse=True)
@@ -23,9 +21,7 @@ def app():
 
     test_app = create_app("test")
     with test_app.app_context():
-        db.create_all()
         yield test_app
-        db.drop_all()
 
 
 @pytest.fixture()
@@ -45,30 +41,39 @@ def default_user():
     in all the tests (autouse=True)
     '''
 
-    user = User(username="test", email="test@test.com")
-    user.password = User.hash_password("test_123")
-    db.session.add(user)
-    db.session.commit()
-    return user
+    user1 = User(email="test1@test.com", first_name="test", last_name="test")
+    user2 = User(email="test2@test.com", first_name="test", last_name="test")
+    user1.password = User.hash_password("test1_123")
+    user2.password = User.hash_password("test2_123")
+    user1.save()
+    user2.save()
+    yield user1, user2
+    User.drop_collection()
+    #user1.delete()
+    #user2.delete()
 
 
 @pytest.fixture
-def default_tracker(default_user):
+def default_template(default_user):
     '''
     Sets up a default favourite object
     '''
-
-    tracker = FavouriteTracker(character_id=CHARACTER_ID, user_id=default_user.id)
-    db.session.add(tracker)
-    db.session.commit()
-    return tracker
+    owner1, owner2 = default_user
+    template1 = Template(template_name="test_temp", subject="template", body="Testing template", owner=owner1)
+    template2 = Template(template_name="test_temp", subject="template", body="Testing template", owner=owner2)
+    template1.save()
+    template2.save()
+    yield template1.id, template2.id
+    Template.drop_collection()
+    #template1.delete()
+    #template2.delete()
 
 
 @pytest.fixture
-def token(default_user):
+def token(client,default_user):
     '''
     Generates access token for testing
     authenticated endpoints
     '''
-
-    return create_access_token(identity=default_user)
+    user1, user2 = default_user
+    return create_access_token(identity=user1), create_access_token(identity=user2)

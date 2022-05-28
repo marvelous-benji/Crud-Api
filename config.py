@@ -42,7 +42,7 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
     MONGODB_SETTINGS = {
         "db": get_env("DEV_DB"),
-        "host": get_env("URI")
+        "host": get_env("URI") + get_env("DEV_DB")
     }
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=20)
     JWT_CREATE_TOKEN_EXPIRES = timedelta(hours=20)
@@ -56,7 +56,7 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
     MONGODB_SETTINGS = {
         "db": get_env("PROD_DB"),
-        "host": get_env("URI")
+        "host": get_env("URI") + get_env("PROD_DB")
     }
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=20)
     JWT_CREATE_TOKEN_EXPIRES = timedelta(hours=20)
@@ -70,7 +70,7 @@ class TestingConfig(BaseConfig):
     TESTING = True
     MONGODB_SETTINGS = {
         "db": get_env("TEST_DB"),
-        "host": get_env("URI")
+        "host": get_env("URI") + get_env("TEST_DB")
     }
     JWT_ACCESS_TOKEN_EXPIRES = False
 
