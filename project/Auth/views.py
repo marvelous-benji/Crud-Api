@@ -51,7 +51,6 @@ def signup():
             """
 
             serializer = UserSchema().load(data)
-            print(serializer)
         except ValidationError as err:
             return (
                 jsonify(
@@ -71,7 +70,6 @@ def signup():
             last_name=serializer["last_name"],
         )
         user.password = User.hash_password(serializer["password"])
-        print("I GOT HERE SUCCESSFULLY", user.password)
         user.save()
         return jsonify({"status": "success", "msg": "Signup was successful"}), 201
     except Exception as e:
