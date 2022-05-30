@@ -13,8 +13,10 @@ Just a simple API illustrating concepts
 ---
 
 ## How To Use
-API Base URL: https://crud-a.herokuapp.com/api/v1/
-Auth Endpoints: https://crud-a.herokuapp.com/api/v1/auth/register, https://crud-a.herokuapp.com/api/v1/auth/login
+API Base URL: https://crud-a.herokuapp.com/api/v1/  
+
+Auth Endpoints: https://crud-a.herokuapp.com/api/v1/auth/register, https://crud-a.herokuapp.com/api/v1/auth/login  
+
 Template Endpoints: https://crud-a.herokuapp.com/api/v1/template
 
 #### Installation
